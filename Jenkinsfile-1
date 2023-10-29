@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+    tools{
+        maven 'maven-3.8.6'
+    }
+    stages{
+        stage('checkout git'){
+            steps{
+                git branch: 'main', url: 'https://github.com/logicopslab/java-web-app'
+            }
+        }
+
+        stage('Build & Junit test'){
+            steps{
+                sh 'mvn install'
+            }
+            post{
+                success{
+                    junit 'target/surefire-reports/**/*.xml'
+                }
+            }
+        }
+    }
+
+}
